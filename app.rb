@@ -28,7 +28,6 @@ post '/remove' do
   erb :index, locals: { recipe_name: recipe_name, show_input: show_input, ingredients: ingredients, macros: macros }
 end
 
-# app.rb
 post '/ask' do
   recipe_name = params[:recipe_name]
   show_input  = !show_input
