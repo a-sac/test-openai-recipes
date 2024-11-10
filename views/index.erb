@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Recipe Ingredients Finder</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <style>
     body {
@@ -10,77 +11,302 @@
       padding: 0;
       background-color: #f4f4f4;
       color: #333;
-    }
-
-    h1 {
-      background-color: #5A9;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    ul {
-      padding: 20px;
-      list-style-type: none;
-    }
-
-    li {
-      background-color: white;
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 5px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
     }
 
-    li:nth-child(odd) {
-      background-color: #f9f9f9;
+    .item {
+      width: 800px;
+      background-color: #FFFFFF;
+      margin-bottom: 25px;
+      margin-top: 0px;
+      padding: 0;
+      -webkit-box-shadow: 0 2px 2px 0 rgba(144, 144, 144, 0.14), 0 3px 1px -2px transparent, 0 1px 5px 0 rgba(145, 145, 145, 0.12);
+      box-shadow: 0 2px 2px 0 rgba(144, 144, 144, 0.14), 0 3px 1px -2px transparent, 0 1px 5px 0 rgba(145, 145, 145, 0.12);
+      border-radius:  5px;
+      font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #676a6c;
+      font-size: 20px;
     }
 
-    .ingredient-name {
-      font-weight: bold;
+    .header{
+      padding: 20px 20px 15px 20px;
+      display: flex;
+      align-items: center;
     }
 
-    .ingredient-quantity {
-      font-style: italic;
-      color: #555;
+    .meal-name {
+      flex-grow: 1;
+    }
+
+    .meal-name .name {
+      cursor: pointer;
+      border-bottom: 2px dashed #DDDDDD;
+      vertical-align: text-bottom;
+    }
+
+    .actions {
+      display: flex;
+      margin-left: 10px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .action {
+      margin-left: 16px;
+    }
+
+    .hour {
+      cursor: pointer;
+      border-bottom: 2px #1AB394 dashed;
+      font-weight: 100;
+      margin-left: 16px;
+    }
+
+    button.ai_meal {
+      background-color: #fff;
+      color: #676a6c;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border: 1px solid #FFFFFF;
+    }
+
+    .ai_meal:hover {
+      border: 1px solid #1ab394;
+      background-color: #fff;
+      border-radius: 3px;
+      color: #1ab394;
+    }
+
+    .content {
+      padding: 20px;
+      padding-top: 0px;
+    }
+
+    .field-header {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-size: 0.9em;
+      font-weight: 100;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      border-top: 1px solid #EEEEEE;
+      border-right: 1px solid #EEEEEE;
+      border-bottom: 1px solid #EEEEEE;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .field:first-child {
+      margin-top: 0px;
+    }
+
+    .plus {
+      min-width: 19px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #FAFAFB;
+      border-left: 1px solid #EEEEEE;
+      color: #1ab394;
+      font-size: 16px;
+      height: 24px;
+      font-size: 16px;
+      font-weight: 100;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .trash {
+      min-width: 19px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #FAFAFB;
+      border-left: 1px solid #EEEEEE;
+      color: #1ab394;
+      height: 24px;
+      font-size: 16px;
+      font-weight: 100;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+    }
+
+    i {
+      margin: auto;
+    }
+
+    .text {
+      line-height: 24px;
+      padding: 10px;
+      cursor: pointer;
+      border-left: 1px solid #EEEEEE;
+      font-size: 15px;
+      opacity: 0.5;
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .label {
+      line-height: 24px;
+      font-size: 15px;
+      text-align: left;
+    }
+
+    input {
+      border: 1px solid #676a6c;
+      border-radius: 3px;
+      line-height: 18px;
+    }
+
+    .ingredient {
+      opacity: 1;
+    }
+
+    .macros {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .macro {
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .macro-name {
+      font-weight: 100;
+      font-size: 16px;
+    }
+
+    .macro-name {
+      font-size: 16px;
+    }
+
+    .form {
+      display: flex;
+      margin: auto;
+      align-items: center;
+      justify-items: center;
+    }
+
+    form {
+      margin: 0 auto; 
+    }
+
+    button {
+      background-color: #1AB394;
+      border: none;
+      color: white;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #18a689;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <h1>Get Recipe Ingredients</h1>
-  <form action="/ask" method="POST">
-    <label for="recipe_name">Enter Recipe Name:</label>
-    <input type="text" name="recipe_name" id="recipe_name" required>
-    <button type="submit">Get Ingredients</button>
-  </form>
 
-  <% if @error %>
-    <p style="color: red;"><%= @error %></p>
-  <% end %>
+  <div class="item">
 
-  <% if @ingredients %>
-    <h3>Ingredients for <%= recipe_name %>:</h3>
-    <ul>
-      <% if @ingredients && @ingredients.any? %>
-        <% @ingredients.each do |ingredient| %>
-          <li><strong><%= ingredient[:quantity] %></strong> <%= ingredient[:name] %></li>
+    <div class="header">
+      <div class="meal-name"><span class="name">Lunch</span></div>
+
+      <form action="/toggle_div" method="POST">
+        <button class="ai_meal">
+          AI Meal <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+      </form>
+
+      <div class="hour"><span>12:00</span></div>
+
+      <div class="actions">
+        <div class="action"><i class="fa-solid fa-upload"></i></div>
+        <div class="action"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <% if show_input %>
+        <div class="form">
+          <form action="/ask" method="POST">
+            <label class="label" for="recipe_name">Recipe Name:</label>
+            <input type="text" name="recipe_name" id="recipe_name" required>
+            <button type="submit">Get Ingredients</button>
+          </form>
+
+          <% if @error %>
+            <p style="color: red;"><%= @error %></p>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="field-header">
+        <div class="title">
+          Dish
+        </div>
+      </div>
+        <% if ingredients && ingredients.any? %>
+          <% ingredients.each do |ingredient| %>
+            <div class="field">
+              <div class="plus"><i class="fa-solid fa-bars"></i></div>
+              <div class="text ingredient"><%= ingredient[:quantity] %> of <%= ingredient[:name] %></div>
+              <div class="trash"><i class="fa fa-trash"></i></div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="field">
+            <div class="plus"><i class="fa-solid fa-add"></i></div>
+            <div class="text">Add new food</div>
+          </div>
+        <% end %>
+    </ul>
+    </div>
+    <div class="macros">
+      <% if macros && macros.any? %>
+        <% macros.each do |macro| %>
+          <div class="macro">
+            <div class="macro-name"><%= macro[:name] %></div>
+            <div class="quantity"><%= macro[:quantity] %></div>
+          </div>
         <% end %>
       <% else %>
-        <p>No ingredients found or the recipe name is invalid.</p>
+        <div class="macro">
+          <div class="macro-name">Energy</div>
+          <div class="quantity">0 kcal</div>
+        </div>
+        <div class="macro">
+          <div class="macro-name">Fat</div>
+          <div class="quantity">0 g</div>
+        </div>
+        <div class="macro">
+          <div class="macro-name">Carbohydrates</div>
+          <div class="quantity">0 g</div>
+        </div>
+        <div class="macro">
+          <div class="macro-name">Protein</div>
+          <div class="quantity">0 g</div>
+        </div>
       <% end %>
-    </ul>
-    <h3>Macros for <%= recipe_name %>:</h3>
-    <ul>
-      <% if @macros && @macros.any? %>
-        <% @macros.each do |macro| %>
-          <li><strong><%= macro[:quantity] %></strong> <%= macro[:name] %></li>
-        <% end %>
-      <% else %>
-        <p>No macros found or the recipe name is invalid.</p>
-      <% end %>
-    </ul>
-  <% end %>
+    </div>
+  </div>
 </body>
 </html>

@@ -7,19 +7,32 @@ require 'dotenv'
 Dotenv.load
 
 # Set up the OpenAI client
-client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
+client     = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
+show_input = false
+ingredients = []
+macros      = []
 
 # Route to the homepage
 get '/' do
-  erb :index
+  erb :index, locals: { show_input: show_input, ingredients: ingredients, macros: macros }
+end
+
+post '/toggle_div' do
+  show_input = !show_input
+
+  puts show_input
+
+  erb :index, locals: { show_input: show_input, ingredients: ingredients, macros: macros }
 end
 
 # app.rb
 post '/ask' do
   recipe_name = params[:recipe_name]
+  show_input  = !show_input
+
   if recipe_name.nil? || recipe_name.strip.empty?
     @error = "Please enter a valid recipe name."
-    return erb :index
+    return erb :index, { show_input: show_input, ingredients: ingredients, macros: macros }
   end
 
   begin
@@ -42,12 +55,14 @@ post '/ask' do
               The name of the food, should be the one used on the USDA DB.
               Up to 7 ingredients. Only provide foods who are strictly necessary for the recipe.
               Finally, provide the total number of energy in kcal, fat in g, Carbohydrate in g, and protein in g of this recipe.
+              It shall follow this structure: Energy: X kcal\nFat: X grams\nCarbohydrates: X grams\nProtein: X grams
               To separate the name of the macros and the quantity, use a ":"
             PROMPT
           }
         ]
       }
     )
+    
     puts response
     # Extracting the ingredients from the response
     info = response.dig('choices', 0, 'message', 'content')
@@ -57,15 +72,15 @@ post '/ask' do
     # If OpenAI response is not empty, process the ingredients
     if info
       # Clean up and structure the ingredients into name/quantity pairs
-      @ingredients, @macros = process_info(info)
+      ingredients, macros = process_info(info)
     end
 
     # Pass the recipe_name into the view along with the ingredients
-    erb :index, locals: { recipe_name: recipe_name }
+    erb :index, locals: { recipe_name: recipe_name, show_input: show_input, ingredients: ingredients, macros: macros }
 
   rescue OpenAI::Error => e
     @error = "An error occurred while contacting OpenAI: #{e.message}"
-    erb :index, locals: { recipe_name: recipe_name }
+    erb :index, locals: { recipe_name: recipe_name, show_input: show_input, ingredients: ingredients, macros: macros }
   end
 end
 
@@ -96,7 +111,7 @@ def process_info(info)
 
       puts "Processed macro: #{macro_name} - #{macro_quantity}"
 
-      macros << { quantity: macro_name, name: macro_quantity }
+      macros << { quantity: macro_quantity, name: macro_name }
 
       next
     end
