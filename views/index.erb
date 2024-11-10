@@ -80,6 +80,28 @@
       color: #1ab394;
     }
 
+    .remove {
+      display: flex;
+      margin-left: 10px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    button.remove_list {
+      background-color: #fff;
+      border: 1px solid #CC5965;
+      color: #CC5965;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+
+    .remove_list:hover {
+      background-color: #CC5965;
+      color: #ffffff;
+      border-radius: 3px;
+    }
+
     .content {
       padding: 20px;
       padding-top: 0px;
@@ -262,24 +284,33 @@
       <div class="field-header">
         <div class="title">
           Dish
+          <% if recipe_name %>
+            - (<%= recipe_name %>)
+          <% end %>
         </div>
       </div>
-        <% if ingredients && ingredients.any? %>
-          <% ingredients.each do |ingredient| %>
-            <div class="field">
-              <div class="plus"><i class="fa-solid fa-bars"></i></div>
-              <div class="text ingredient"><%= ingredient[:quantity] %> of <%= ingredient[:name] %></div>
-              <div class="trash"><i class="fa fa-trash"></i></div>
-            </div>
-          <% end %>
-        <% else %>
+      <% if ingredients && ingredients.any? %>
+        <% ingredients.each do |ingredient| %>
           <div class="field">
-            <div class="plus"><i class="fa-solid fa-add"></i></div>
-            <div class="text">Add new food</div>
+            <div class="plus"><i class="fa-solid fa-bars"></i></div>
+            <div class="text ingredient"><%= ingredient[:quantity] %> of <%= ingredient[:name] %></div>
+            <div class="trash"><i class="fa fa-trash"></i></div>
           </div>
         <% end %>
-    </ul>
+      <% else %>
+        <div class="field">
+          <div class="plus"><i class="fa-solid fa-add"></i></div>
+          <div class="text">Add new food</div>
+        </div>
+      <% end %>
     </div>
+    <div class="remove">
+        <form action="/remove" method="POST">
+          <button class="remove_list">
+            Remove all foods <i class="fa-solid fa-trash"></i>
+          </button>
+        </form>
+      </div>
     <div class="macros">
       <% if macros && macros.any? %>
         <% macros.each do |macro| %>
