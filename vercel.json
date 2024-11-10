@@ -3,13 +3,11 @@
   "builds": [
     {
       "src": "app.rb",
-      "use": "@vercel/ruby"
+      "use": "@vercel/ruby",
+      "config": { "zeroConfig": true }
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/app.rb"
-    }
+    { "src": "/(.*)", "dest": "app.rb" }
   ]
 }
