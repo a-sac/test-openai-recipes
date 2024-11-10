@@ -3,9 +3,6 @@ require 'sinatra'
 require 'openai'
 require 'dotenv'
 
-set :bind, '0.0.0.0'
-set :port, 3000
-
 # Load environment variables from .env file
 Dotenv.load
 
