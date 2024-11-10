@@ -6,8 +6,6 @@ require 'dotenv'
 # Load environment variables from .env file
 Dotenv.load
 
-set :port, ENV['PORT'] || 4567
-
 # Set up the OpenAI client
 client = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
 

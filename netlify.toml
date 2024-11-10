@@ -1,9 +1,0 @@
-[build]
-  publish = "/"
-  command = "bundle exec ruby app.rb"
-
-[context.production.environment]
-  RACK_ENV = "development"  # Or 'production', depending on what you're doing locally
-
-[dev]
-  command = "bundle exec ruby app.rb"
