@@ -221,6 +221,12 @@
       margin: auto;
       align-items: center;
       justify-items: center;
+      flex-direction: column;
+    }
+
+    .error {
+      color: #CC5965;
+      font-size: 10px;
     }
 
     form {
@@ -277,7 +283,7 @@
           </form>
 
           <% if @error %>
-            <p style="color: red;"><%= @error %></p>
+            <p class="error"><%= @error %></p>
           <% end %>
         </div>
       <% end %>

@@ -23,6 +23,7 @@ end
 post '/remove' do
   ingredients = []
   macros      = []
+  recipe_name = nil
 
   erb :index, locals: { recipe_name: recipe_name, show_input: show_input, ingredients: ingredients, macros: macros }
 end
@@ -75,8 +76,11 @@ post '/ask' do
     end
 
     puts "Ingredients: #{ingredients}, Macros: #{macros}"
-    if ingredients==[] && macros==[]
+    if ingredients.to_a.empty? && macros.to_a.empty?
       recipe_name = nil
+      show_input = true
+
+      @error = "We were not able to process your request. Please try again."
     end
 
     erb :index, locals: { recipe_name: recipe_name, show_input: show_input, ingredients: ingredients, macros: macros }
@@ -87,19 +91,21 @@ post '/ask' do
 end
 
 def process_info(info)
-  meal_info = info.split("\n")
+  meal_info = info.split("\n").reject(&:empty?)
   macros = []
+
+  return [] if meal_info.length < 2
 
   structured_ingredients = meal_info.map do |ingredient|
     ingredient = ingredient.strip
     ingredient = ingredient.sub(/^\d+\.\s*/, '')
 
-    parts = ingredient.split("-", 2)
+    parts = ingredient.split(" - ", 2)
 
-    if parts.length < 2
+    if invalid_duo?(parts)
       parts = ingredient.split(":", 2)
       
-      next if parts.length < 2
+      next if invalid_duo?(parts)
 
       macro_name = parts[0].strip
       macro_quantity = parts[1].strip
@@ -120,4 +126,8 @@ def process_info(info)
   end
   
   [structured_ingredients.compact, macros.compact]
+end
+
+def invalid_duo?(parts)
+  parts.length < 2 || parts[0].empty? || parts[1].empty?
 end
