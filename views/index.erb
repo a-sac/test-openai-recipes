@@ -96,7 +96,28 @@
       padding: 2px 4px;
     }
 
+    button.like {
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 8px;
+    }
+
+    button.dislike {
+      background-color: #fff;
+      border: 1px solid #CC5965;
+      color: #CC5965;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 8px;
+    }
+
     .remove_list:hover {
+      background-color: #CC5965;
+      color: #ffffff;
+      border-radius: 3px;
+    }
+
+    .dislike:hover {
       background-color: #CC5965;
       color: #ffffff;
       border-radius: 3px;
@@ -185,13 +206,26 @@
       border: 1px solid #676a6c;
       border-radius: 3px;
       line-height: 18px;
+      width: 400px;
+      height: 100px;
     }
 
     .ingredient {
       opacity: 1;
     }
 
-    .macros {
+    .ingredient-macros{
+      display: flex;
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .ingredient-macro{
+      font-size: 15px;
+      margin-left: 16px;
+    }
+
+    .meal_nutrition {
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -224,6 +258,12 @@
       flex-direction: column;
     }
 
+    form {
+      display: flex;
+      align-items: flex-start;
+      justify-items: center;
+    }
+
     .error {
       color: #CC5965;
       font-size: 10px;
@@ -249,6 +289,22 @@
     button:hover {
       background-color: #18a689;
       color: white;
+    }
+
+    .feedback {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      text-align: center;
+      padding: 20px;
+      margin-left: 300px;
+      margin-right: 300px;
+    }
+
+    .feedback-submited {
+      font-size: 15px;
+      color: #1ab394;
+      text-align: center;
     }
   </style>
 </head>
@@ -277,8 +333,8 @@
       <% if show_input %>
         <div class="form">
           <form action="/ask" method="POST">
-            <label class="label" for="recipe_name">Recipe Name:</label>
-            <input type="text" name="recipe_name" id="recipe_name" required>
+            <label class="label" for="meal_description">Recipe Name:</label>
+            <textarea name="meal_description" id="meal_description" rows="4" cols="50" required></textarea>
             <button type="submit">Get Ingredients</button>
           </form>
 
@@ -288,11 +344,17 @@
         </div>
       <% end %>
 
+      <% if feedback_submit %>
+        <div class="feedback-submited">
+          Your feedback was submited. Thanks!
+        </div>
+      <% end %>
+
       <div class="field-header">
         <div class="title">
           Dish
-          <% if recipe_name %>
-            - (<%= recipe_name %>)
+          <% if meal_description %>
+            - (<%= meal_description %>)
           <% end %>
         </div>
       </div>
@@ -304,7 +366,31 @@
             <div class="text ingredient"><%= ingredient[:quantity] %> of <%= ingredient[:name] %></div>
             <div class="trash"><i class="fa fa-trash"></i></div>
           </div>
+          <div class="ingredient-macros">
+            <div class="ingredient-macro">Energy: <%= ingredient[:energy] %> kcal</div>
+            <div class="ingredient-macro">Fat: <%= ingredient[:fat] %> g</div>
+            <div class="ingredient-macro">Carbohydrates: <%= ingredient[:carbohydrates] %> g</div>
+            <div class="ingredient-macro">Protein: <%= ingredient[:protein] %> g</div>
+          </div>
         <% end %>
+
+        <div class="feedback">
+          <div class="like">
+            <form action="/like" method="POST">
+              <button class="like">
+                <i class="fa-regular fa-thumbs-up"></i>
+              </button>
+            </form>
+          </div>
+
+          <div class="dislike">
+            <form action="/dislike" method="POST">
+              <button class="dislike">
+                <i class="fa-regular fa-thumbs-down"></i>
+              </button>
+            </form>
+          </div>
+        </div>
 
       <% else %>
         <div class="field">
@@ -323,14 +409,27 @@
       </form>
     </div>
 
-    <div class="macros">
-      <% if macros && macros.any? %>
-        <% macros.each do |macro| %>
-          <div class="macro">
-            <div class="macro-name"><%= macro[:name] %></div>
-            <div class="quantity"><%= macro[:quantity] %></div>
-          </div>
-        <% end %>
+    <div class="meal_nutrition">
+      <% if meal_nutrition && meal_nutrition.any? %>
+        <div class="macro">
+          <div class="macro-name">Energy</div>
+          <div class="quantity"><%= meal_nutrition[:energy] %> kcal</div>
+        </div>
+
+        <div class="macro">
+          <div class="macro-name">Fat</div>
+          <div class="quantity"><%= meal_nutrition[:fat] %> g</div>
+        </div>
+
+        <div class="macro">
+          <div class="macro-name">Carbohydrates</div>
+          <div class="quantity"><%= meal_nutrition[:carbohydrates] %> g</div>
+        </div>
+        
+        <div class="macro">
+          <div class="macro-name">Protein</div>
+          <div class="quantity"><%= meal_nutrition[:protein] %> g</div>
+        </div>
 
       <% else %>
         <div class="macro">
